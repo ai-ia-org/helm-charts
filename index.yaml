@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  rpc-balancer:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-04-17T19:49:48.178702455Z"
+    description: A Helm chart for Kubernetes
+    digest: 0910570eebc9c77eaccdcfd52f12f72034eb7fc322ee2c0c906daeeb410625dc
+    name: rpc-balancer
+    type: application
+    urls:
+    - https://github.com/ai-ia-org/helm-charts/releases/download/rpc-balancer-0.1.0/rpc-balancer-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-04-17T19:49:48.178713575Z"
