@@ -26,6 +26,36 @@ config:
       url: "http://devnet-2.node:8545"
       wsUrl: "ws://devnet-2.node:8546"
 
+#Enabling prometheus will create service monitor and optionally prometheus rules
+prometheus:
+  enabled: false
+  port: 6060
+  serviceMonitor:
+    interval: 15
+    path: /
+    timeout: 1
+  rules:
+    enabled: false
+    configuration:
+      - alert: RPC loadbalancer upstream down
+        expr: rpc_balancer_upstream_up == 0 AND rpc_balancer_chain_healthy_upstream_num != 0
+        for: 5m
+        labels:
+          severity: warning
+          service: "rpc-load-balancer"
+        annotations:
+          description: RPC loadbalancer upstream {{ $labels.chainname }} upstream {{ $labels.name }} (URL - {{ $labels.url }}) down
+          summary: RPC loadbalancer upstream is down
+      - alert: All RPC loadbalancer upstreams down
+        expr: rpc_balancer_chain_healthy_upstream_num == 0
+        for: 3m
+        labels:
+          severity: critical
+          service: "rpc-load-balancer"
+        annotations:
+          description: All upstream for chain {{ $labels.chainid }} {{ $labels.chainname }} are down
+          summary:  All upstream for chain are down
+
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
 

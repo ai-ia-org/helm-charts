@@ -1,0 +1,15 @@
+{{- if .Values.prometheus.rules.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "rpc-balancer.fullname" . }}
+  labels:
+    {{- include "rpc-balancer.labels" . | nindent 4 }}
+spec:
+{{- with .Values.prometheus.rules.configuration }}
+  groups:
+    - name: rpc-loadbalancer-monitoring
+      rules:
+{{ toYaml .| indent 8 }}
+{{- end }}
+{{- end }}

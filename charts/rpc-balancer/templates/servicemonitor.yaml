@@ -1,0 +1,20 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "rpc-balancer.fullname" . }}
+  labels:
+    {{- include "rpc-balancer.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - interval: "{{ .Values.prometheus.serviceMonitor.interval }}s"
+    scrapeTimeout: "{{ .Values.prometheus.serviceMonitor.timeout }}s"
+    path: "{{ .Values.prometheus.serviceMonitor.path }}"
+    targetPort: metrics
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "rpc-balancer.fullname" . }}
+{{- end }}

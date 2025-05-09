@@ -34,7 +34,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           args:
-           - -c
+           - --config
            - /app/config.yaml
           {{- with .Values.securityContext }}
           securityContext:
@@ -46,6 +46,11 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+              {{- if .Values.prometheus.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.prometheus.port }}
+              protocol: TCP
+              {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
